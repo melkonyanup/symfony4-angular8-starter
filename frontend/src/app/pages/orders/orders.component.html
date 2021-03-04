@@ -1,0 +1,112 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Orders</mat-card-title>
+    <mat-card-subtitle>You can search for orders by customer or status and cancel an order. </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="container">
+      <form class="row">
+          <div class="form-group col-12 col-md-5">
+            <mat-form-field class="full-width">
+              <mat-label>Customer:</mat-label>
+              <input matInput [(ngModel)]="filterParams.customer" autocomplete="off" name="name" id="name" (ngModelChange)="filterByCustomer($event)">
+            </mat-form-field>
+          </div>
+          <div class="form-group col-12 col-md-5">
+            <mat-form-field class="full-width">
+              <mat-label>Status:</mat-label>
+              <mat-select [(ngModel)]="filterParams.status" name="status" (ngModelChange)="filterByStatus($event)">
+                <mat-option *ngFor="let status of statuses" [value]="status">
+                  {{status}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-group col-12 col-md-2">
+            <button type="button" mat-raised-button color="basic" (click)="clearFilters()">Clear filters</button>
+          </div>
+      </form>
+
+      <div class="row">
+        <div class="col-12">
+          <table mat-table [dataSource]="dataSource" matSort class="full-width">
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+            </ng-container>
+
+            <!-- Customer Column -->
+            <ng-container matColumnDef="customer">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Customer </th>
+              <td mat-cell *matCellDef="let element"> {{element.customer}} </td>
+            </ng-container>
+          
+            <!-- Address Column -->
+            <ng-container matColumnDef="address1">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+              <td mat-cell *matCellDef="let element"> {{element.address1}} </td>
+            </ng-container>
+          
+            <!-- City Column -->
+            <ng-container matColumnDef="city">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+              <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+            </ng-container>
+
+            <!-- Postcode Column -->
+            <ng-container matColumnDef="postcode">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Postcode </th>
+              <td mat-cell *matCellDef="let element"> {{element.postcode}} </td>
+            </ng-container>
+
+            <!-- Country Column -->
+            <ng-container matColumnDef="country">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Country </th>
+              <td mat-cell *matCellDef="let element"> {{element.country}} </td>
+            </ng-container>
+            
+            <!-- Amount Column -->
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+              <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+            </ng-container>
+            
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+              <td mat-cell *matCellDef="let element">
+                <div [ngSwitch]="element.status">
+                  <span *ngSwitchCase="'in_production'" class="badge badge-primary"> in_production</span>
+                  <span *ngSwitchCase="'pending'" class="badge badge-warning"> pending </span>
+                  <span *ngSwitchCase="'cancelled'" class="badge badge-secondary"> cancelled </span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> Actions </th>
+              <td mat-cell *matCellDef="let element">
+                <button type="button" mat-button color="warn" (click)="cancelOrder(element)">
+                  <mat-icon aria-hidden="false" aria-label="Cancel the order">delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="9">No data matching the filter</td>
+            </tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
