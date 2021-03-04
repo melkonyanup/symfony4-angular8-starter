@@ -1,4 +1,4 @@
-Angular 8 with Symphony 4 Backend : Task Project
+Symphony 4 + Angular 8 : Starter Project
 ========================
 
 Requirements
